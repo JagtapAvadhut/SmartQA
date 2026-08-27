@@ -1,0 +1,36 @@
+# Runtime adaptation configuration (versioned heuristics — no source edit required).
+# Persisted overrides can later move to DB; defaults live here.
+
+smartqa:
+  pipeline:
+    max-attempts: ${SMARTQA_PIPELINE_MAX_ATTEMPTS:3}
+    skip-execution: ${SMARTQA_PIPELINE_SKIP_EXECUTION:false}
+  adaptation:
+    version: 1
+    ai:
+      recovery-confidence-threshold: 0.55
+      prompt-version: failure-diagnostic-v1
+      call-on: [ambiguity, locator, search, filter, actionability, wrong-host, assertion, repeated-recovery]
+    recovery:
+      retry-count: 3
+      dismiss-overlay-first: true
+    strategies:
+      PROFILE_ICON_DISCOVERY:
+        version: 3
+        prefer-actionable-ancestor: true
+      FILTER_DISCOVERY:
+        version: 2
+        expand-closed-panels: true
+        wait-for-result-state: true
+        reapply-on-retry: true
+      SEARCH_AUTOCOMPLETE:
+        version: 3
+        wait-for-suggestions: true
+        select-semantic-match: true
+        restore-expected-host: true
+        avoid-export-host-redirect: true
+      ASSERTION:
+        version: 2
+        do-not-weaken: true
+        verify-context-before-fail: true
+        restore-host-before-assert: true

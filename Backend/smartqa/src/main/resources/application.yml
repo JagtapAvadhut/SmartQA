@@ -1,0 +1,114 @@
+spring:
+  application:
+    name: smartqa
+  config:
+    import: optional:classpath:adaptation-defaults.yml
+  r2dbc:
+    url: ${SMARTQA_DB_URL:r2dbc:postgresql://localhost:5432/smartqa}
+    username: ${SMARTQA_DB_USERNAME:postgres}
+    password: ${SMARTQA_DB_PASSWORD:postgres}
+  flyway:
+    enabled: true
+    url: ${SMARTQA_DB_JDBC_URL:jdbc:postgresql://localhost:5432/smartqa}
+    user: ${SMARTQA_DB_USERNAME:postgres}
+    password: ${SMARTQA_DB_PASSWORD:postgres}
+    locations: classpath:db/migration
+
+server:
+  port: ${SMARTQA_PORT:8081}
+
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd'T'HH:mm:ss.SSSXXX} %-5level traceId=%X{traceId:-} [%logger] %msg%n"
+  level:
+    root: INFO
+    com.smartqa: INFO
+    smartqa.trace: INFO
+
+smartqa:
+  cors:
+    allowed-origins: ${SMARTQA_UI_ORIGIN:http://localhost:5300}
+  execution:
+    timeout-seconds: ${SMARTQA_EXECUTION_TIMEOUT_SECONDS:180}
+    screenshot-mode: ${SMARTQA_SCREENSHOT_MODE:IMPORTANT}
+    step-by-step: ${SMARTQA_STEP_BY_STEP:false}
+  screenshots:
+    base-dir: ${SMARTQA_SCREENSHOT_DIR:./screenshots}
+  browser:
+    provider: ${SMARTQA_BROWSER_PROVIDER:playwright}
+    type: ${SMARTQA_BROWSER_TYPE:chromium}
+    headless: ${SMARTQA_BROWSER_HEADLESS:false}
+    maximize-headed: ${SMARTQA_BROWSER_MAXIMIZE_HEADED:true}
+    # Chromium page zoom (Chrome ⋮ → Zoom). Default 50 for headed. Independent of window size.
+    zoom-percent: ${SMARTQA_BROWSER_ZOOM_PERCENT:50}
+    headless-viewport-width: ${SMARTQA_BROWSER_HEADLESS_VIEWPORT_WIDTH:1280}
+    headless-viewport-height: ${SMARTQA_BROWSER_HEADLESS_VIEWPORT_HEIGHT:720}
+  mcp:
+    enabled: ${SMARTQA_MCP_ENABLED:false}
+    url: ${SMARTQA_MCP_URL:http://127.0.0.1:8931}
+  ai:
+    provider: ${SMARTQA_AI_PROVIDER:gemini}
+    primary-provider: ${SMARTQA_AI_PRIMARY_PROVIDER:}
+    fallback-provider: ${SMARTQA_AI_FALLBACK_PROVIDER:ollama}
+    # Bounded timeout calibrated for local LLM warm inference (~2–3 min on 7B).
+    # Keep below Vite /api proxyTimeout (300s). Never unbounded.
+    timeout-seconds: ${SMARTQA_AI_TIMEOUT_SECONDS:180}
+    # Intent understanding must stay below browser execution timeout.
+    intent-timeout-seconds: ${SMARTQA_AI_INTENT_TIMEOUT_SECONDS:45}
+    connect-timeout-seconds: ${SMARTQA_AI_CONNECT_TIMEOUT_SECONDS:10}
+    max-retries: ${SMARTQA_AI_MAX_RETRIES:1}
+    # Important failures: Gemini diagnosis + Ollama second opinion via ConsensusResolver.
+    consensus-enabled: ${SMARTQA_AI_CONSENSUS_ENABLED:true}
+    consensus-low-confidence: ${SMARTQA_AI_CONSENSUS_LOW_CONFIDENCE:0.65}
+    ollama:
+      base-url: ${OLLAMA_BASE_URL:http://localhost:11434}
+      model: ${OLLAMA_MODEL:qwen2.5-coder:3b}
+    gemini:
+      base-url: ${GEMINI_BASE_URL:https://generativelanguage.googleapis.com}
+      api-key: ${GEMINI_API_KEY:}
+      # Optional comma-separated failover keys. Never put real keys in this file.
+      api-keys: ${GEMINI_API_KEYS:}
+      # Override with GEMINI_MODEL. Never put API keys in this file — use GEMINI_API_KEY / GEMINI_API_KEYS env only.
+      model: ${GEMINI_MODEL:gemini-flash-latest}
+      rotation:
+        enabled: ${SMARTQA_GEMINI_ROTATION_ENABLED:true}
+        cooldown-seconds: ${SMARTQA_GEMINI_COOLDOWN_SECONDS:60}
+        transient-cooldown-seconds: ${SMARTQA_GEMINI_TRANSIENT_COOLDOWN_SECONDS:15}
+        invalid-key-cooldown-seconds: ${SMARTQA_GEMINI_INVALID_KEY_COOLDOWN_SECONDS:300}
+        max-key-attempts: ${SMARTQA_GEMINI_MAX_KEY_ATTEMPTS:all}
+        retry-per-key: ${SMARTQA_GEMINI_RETRY_PER_KEY:1}
+    openai-compatible:
+      base-url: ${OPENAI_COMPATIBLE_BASE_URL:}
+      api-key: ${OPENAI_COMPATIBLE_API_KEY:}
+      model: ${OPENAI_COMPATIBLE_MODEL:}
+  debug:
+    log-dir: ${SMARTQA_TRACE_DIR:./logs/smartqa}
+    max-files: ${SMARTQA_TRACE_MAX_FILES:100}
+    max-age-days: ${SMARTQA_TRACE_MAX_AGE_DAYS:7}
+  intelligence:
+    cdp-enabled: ${SMARTQA_CDP_ENABLED:true}
+    cdp-timeout-ms: ${SMARTQA_CDP_TIMEOUT_MS:4000}
+    cdp-snapshot-mode: ${SMARTQA_CDP_SNAPSHOT_MODE:ESCALATE}
+    network-monitoring: ${SMARTQA_NETWORK_MONITORING:true}
+    network-retention: ${SMARTQA_NETWORK_RETENTION:80}
+    ai-escalation-threshold: ${SMARTQA_AI_ESCALATION_THRESHOLD:0.70}
+    memory-max-entries: ${SMARTQA_MEMORY_MAX_ENTRIES:200}
+  recovery:
+    max-backtrack-steps: ${SMARTQA_RECOVERY_MAX_BACKTRACK_STEPS:3}
+    max-retries: ${SMARTQA_RECOVERY_MAX_RETRIES:3}
+    max-replans: ${SMARTQA_RECOVERY_MAX_REPLANS:2}
+    max-backtracks: ${SMARTQA_RECOVERY_MAX_BACKTRACKS:1}
+    max-same-state-retries: ${SMARTQA_RECOVERY_MAX_SAME_STATE_RETRIES:2}
+  rag:
+    enabled: ${SMARTQA_RAG_ENABLED:true}
+    # Embedding providers are NOT chat models. Prefer local Ollama nomic-embed-text (768-d).
+    embedding-provider: ${SMARTQA_RAG_EMBEDDING_PROVIDER:ollama}
+    ollama-embedding-model: ${SMARTQA_RAG_OLLAMA_EMBEDDING_MODEL:nomic-embed-text}
+    gemini-embedding-model: ${SMARTQA_RAG_GEMINI_EMBEDDING_MODEL:text-embedding-004}
+    embedding-dimension: ${SMARTQA_RAG_EMBEDDING_DIMENSION:768}
+    top-k: ${SMARTQA_RAG_TOP_K:5}
+    relevance-threshold: ${SMARTQA_RAG_RELEVANCE_THRESHOLD:0.55}
+  schedule:
+    enabled: ${SMARTQA_SCHEDULE_ENABLED:false}
+  jira:
+    enabled: ${SMARTQA_JIRA_ENABLED:false}

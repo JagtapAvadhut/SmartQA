@@ -1,0 +1,8 @@
+﻿{
+    "instructions":  "Click the banner containing Samsung\nVerify Samsung",
+    "skipExecution":  false,
+    "maxAttempts":  2,
+    "applicationUrl":  "https://www.flipkart.com/",
+    "browserMode":  "headed",
+    "headless":  false
+}

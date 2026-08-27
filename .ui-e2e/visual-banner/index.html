@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Visual Banner Fixture</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 24px; }
+    nav a { margin-right: 16px; }
+    canvas { display: block; border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <h1>Home</h1>
+  <nav>
+    <a href="/about.html">About</a>
+    <a href="/help.html">Help</a>
+  </nav>
+  <p>No brand name appears as a DOM text node on this page.</p>
+  <a id="promo" href="/clicked.html" aria-label="Promotional graphic">
+    <canvas id="banner" width="900" height="180"></canvas>
+  </a>
+  <button type="button">Electronics</button>
+  <button type="button">Fashion</button>
+  <script>
+    const canvas = document.getElementById('banner');
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#0b4ea2';
+    ctx.fillRect(0, 0, 900, 180);
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 72px Arial';
+    ctx.fillText('Samsung', 48, 115);
+  </script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+﻿{
+    "success":  true,
+    "message":  "Generate \u0026 Validate pipeline started",
+    "data":  {
+                 "id":  "28ae9073-3730-4215-9b03-fd485d4007c6",
+                 "status":  "RUNNING",
+                 "stage":  "PREFLIGHT",
+                 "userStageLabel":  "Checking services",
+                 "projectId":  null,
+                 "testCaseId":  null,
+                 "generationRunId":  null,
+                 "validationRunId":  null,
+                 "executionRunId":  null,
+                 "applicationUrl":  null,
+                 "startedAt":  "2026-08-25T14:20:40.687987100Z",
+                 "finishedAt":  null,
+                 "durationMs":  null,
+                 "errorMessage":  null,
+                 "finalSummary":  null,
+                 "diagnosis":  null,
+                 "attempt":  1,
+                 "maxAttempts":  2,
+                 "userProgress":  [
+                                      "Checking services"
+                                  ],
+                 "details":  {
+                                 "traceId":  "SMARTQA-20260825-195040-bb4e65"
+                             },
+                 "testCase":  null,
+                 "clarifications":  [
+
+                                    ]
+             },
+    "errorCode":  null,
+    "timestamp":  "2026-08-25T14:20:40.717968800Z"
+}

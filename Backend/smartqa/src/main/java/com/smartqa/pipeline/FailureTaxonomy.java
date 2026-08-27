@@ -1,0 +1,107 @@
+package com.smartqa.pipeline;
+
+import java.util.Locale;
+import java.util.Set;
+
+/**
+ * Canonical failure categories. Ordinary engine misses are never USER_INSTRUCTION.
+ */
+public final class FailureTaxonomy {
+
+    public static final String INTENT_NORMALIZATION_FAILURE = "INTENT_NORMALIZATION_FAILURE";
+    public static final String INTENT_VALIDATION_FAILURE = "INTENT_VALIDATION_FAILURE";
+    public static final String TARGET_RESOLUTION_FAILURE = "TARGET_RESOLUTION_FAILURE";
+    public static final String FILTER_TARGET_RESOLUTION_FAILURE = "FILTER_TARGET_RESOLUTION";
+    public static final String AI_RESPONSE_INVALID = "AI_RESPONSE_INVALID";
+    public static final String AI_POOL_EXHAUSTED = "AI_POOL_EXHAUSTED";
+    public static final String OLLAMA_REQUEST_FAILURE = "OLLAMA_REQUEST_FAILURE";
+    public static final String LOCATOR_HEALING_FAILURE = "LOCATOR_HEALING_FAILURE";
+    public static final String INTENT_VALIDATION = "INTENT_VALIDATION";
+    public static final String TARGET_NOT_FOUND = "TARGET_NOT_FOUND";
+    public static final String TARGET_AMBIGUOUS = "TARGET_AMBIGUOUS";
+    public static final String FILTER_CONTAINER_RESOLUTION = "FILTER_CONTAINER_RESOLUTION";
+    public static final String FILTER_TARGET_RESOLUTION = "FILTER_TARGET_RESOLUTION";
+    public static final String SEARCH_RESOLUTION = "SEARCH_RESOLUTION";
+    public static final String ACTIONABILITY_FAILURE = "ACTIONABILITY_FAILURE";
+    public static final String STALE_ELEMENT = "STALE_ELEMENT";
+    public static final String OVERLAY_BLOCKED = "OVERLAY_BLOCKED";
+    public static final String FRAME_RESOLUTION = "FRAME_RESOLUTION";
+    public static final String SHADOW_DOM_RESOLUTION = "SHADOW_DOM_RESOLUTION";
+    public static final String VISUAL_DOM_MISMATCH = "VISUAL_DOM_MISMATCH";
+    public static final String WRONG_PAGE_STATE = "WRONG_PAGE_STATE";
+    public static final String LOGIN_STATE_FAILURE = "LOGIN_STATE_FAILURE";
+    public static final String BUSINESS_STATE_MISMATCH = "BUSINESS_STATE_MISMATCH";
+    public static final String STATE_TRANSITION_FAILURE = "STATE_TRANSITION_FAILURE";
+    public static final String ASSERTION_FAILURE = "ASSERTION_FAILURE";
+    public static final String VALIDATOR_FAILURE = "VALIDATOR_FAILURE";
+    public static final String VALIDATOR_TIMEOUT = "VALIDATOR_TIMEOUT";
+    public static final String NETWORK_FAILURE = "NETWORK_FAILURE";
+    public static final String AI_PROVIDER_FAILURE = "AI_PROVIDER_FAILURE";
+    public static final String ENVIRONMENT_FAILURE = "ENVIRONMENT_FAILURE";
+    public static final String APPLICATION_FAILURE = "APPLICATION_FAILURE";
+    public static final String GENERIC_ENGINE_DEFECT = "GENERIC_ENGINE_DEFECT";
+    public static final String USER_INSTRUCTION = "USER_INSTRUCTION";
+    public static final String INTENT_AMBIGUITY = "INTENT_AMBIGUITY";
+    public static final String ELEMENT_COVERED = "ELEMENT_COVERED";
+    public static final String RAG_FAILURE = "RAG_FAILURE";
+    public static final String SECURITY_FAILURE = "SECURITY_FAILURE";
+    public static final String AUTHORIZATION_FAILURE = "AUTHORIZATION_FAILURE";
+    public static final String INCOMPLETE_CAPTURE = "INCOMPLETE_CAPTURE";
+    public static final String NOT_CONFIDENT = "NOT_CONFIDENT";
+    public static final String DEPENDENCY_FAILED = "DEPENDENCY_FAILED";
+    public static final String PROMPT_INJECTION = "PROMPT_INJECTION";
+
+    public static final Set<String> CANONICAL = Set.of(
+            INTENT_NORMALIZATION_FAILURE, INTENT_VALIDATION_FAILURE, TARGET_RESOLUTION_FAILURE,
+            AI_RESPONSE_INVALID, AI_POOL_EXHAUSTED, OLLAMA_REQUEST_FAILURE, LOCATOR_HEALING_FAILURE,
+            INTENT_VALIDATION, TARGET_NOT_FOUND, TARGET_AMBIGUOUS, FILTER_CONTAINER_RESOLUTION,
+            FILTER_TARGET_RESOLUTION, SEARCH_RESOLUTION, ACTIONABILITY_FAILURE, STALE_ELEMENT,
+            OVERLAY_BLOCKED, FRAME_RESOLUTION, SHADOW_DOM_RESOLUTION, VISUAL_DOM_MISMATCH,
+            WRONG_PAGE_STATE, LOGIN_STATE_FAILURE, BUSINESS_STATE_MISMATCH, STATE_TRANSITION_FAILURE,
+            ASSERTION_FAILURE, VALIDATOR_FAILURE, VALIDATOR_TIMEOUT, NETWORK_FAILURE,
+            AI_PROVIDER_FAILURE, ENVIRONMENT_FAILURE, APPLICATION_FAILURE, GENERIC_ENGINE_DEFECT,
+            USER_INSTRUCTION, INTENT_AMBIGUITY, ELEMENT_COVERED, RAG_FAILURE, SECURITY_FAILURE,
+            AUTHORIZATION_FAILURE, INCOMPLETE_CAPTURE, NOT_CONFIDENT, DEPENDENCY_FAILED, PROMPT_INJECTION
+    );
+
+    private FailureTaxonomy() {
+    }
+
+    public static String canonicalize(String category) {
+        if (category == null || category.isBlank()) {
+            return GENERIC_ENGINE_DEFECT;
+        }
+        String raw = category.trim().toUpperCase(Locale.ROOT);
+        if (CANONICAL.contains(raw)) {
+            return raw;
+        }
+        return switch (raw) {
+            case "LOCATOR", "DOM_DISCOVERY" -> TARGET_NOT_FOUND;
+            case "ACTIONABILITY" -> ACTIONABILITY_FAILURE;
+            case "ASSERTION" -> ASSERTION_FAILURE;
+            case "VALIDATOR", "GENERATED_TEST" -> VALIDATOR_FAILURE;
+            case "FILTER", "FILTER_STATE_MISMATCH" -> FILTER_TARGET_RESOLUTION;
+            case "SEARCH", "SEARCH_STATE_MISMATCH", "LOCATION_STATE_MISMATCH" -> SEARCH_RESOLUTION;
+            case "ENVIRONMENT", "BROWSER" -> ENVIRONMENT_FAILURE;
+            case "WRONG_HOST", "WRONG_PAGE", "WRONG_STATE" -> WRONG_PAGE_STATE;
+            case "VISUAL_TARGET_RESOLUTION" -> VISUAL_DOM_MISMATCH;
+            case "OVERLAY", "ELEMENT_COVERED" -> OVERLAY_BLOCKED;
+            case "STALE", "STALE_DOM" -> STALE_ELEMENT;
+            case "AI_INTENT", "INTENT_VALIDATION_FAILURE" -> INTENT_VALIDATION_FAILURE;
+            case "INTENT_NORMALIZATION", "SEMANTIC_NORMALIZATION" -> INTENT_NORMALIZATION_FAILURE;
+            case "TARGET_RESOLUTION" -> TARGET_RESOLUTION_FAILURE;
+            case "AI_SCHEMA", "AI_RESPONSE_INVALID", "STRUCTURED_OUTPUT" -> AI_RESPONSE_INVALID;
+            case "AI_POOL_EXHAUSTED", "GEMINI_POOL_EXHAUSTED" -> AI_POOL_EXHAUSTED;
+            case "OLLAMA_400", "OLLAMA_REQUEST_FAILURE" -> OLLAMA_REQUEST_FAILURE;
+            case "HEALING", "LOCATOR_HEALING" -> LOCATOR_HEALING_FAILURE;
+            case "AI_FAILURE" -> AI_PROVIDER_FAILURE;
+            case "COVERED", "COVERED_ELEMENT" -> ELEMENT_COVERED;
+            case "INCOMPLETE_EVIDENCE", "INCOMPLETE_SNAPSHOT" -> INCOMPLETE_CAPTURE;
+            case "LOW_CONFIDENCE", "NOT_CONFIDENT" -> NOT_CONFIDENT;
+            case "DEPENDENCY_FAILURE", "PREREQUISITE_FAILED" -> DEPENDENCY_FAILED;
+            case "PROMPT_INJECTION", "INJECTION" -> PROMPT_INJECTION;
+            case "AUTHZ", "AUTHORIZATION" -> AUTHORIZATION_FAILURE;
+            default -> GENERIC_ENGINE_DEFECT;
+        };
+    }
+}

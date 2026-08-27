@@ -1,0 +1,18 @@
+{
+  "scenarios": [
+    {
+      "id": "orangehrm_regression",
+      "name": "OrangeHRM add user validation",
+      "type": "ui-flow",
+      "url": "https://opensource-demo.orangehrmlive.com",
+      "instructions": "Open the OrangeHRM application. Enter \"admin\" in the Username text box. Enter \"admin123\" in the Password text box. Click the \"Login\" button. Click the \"Search\" text box in the left sidebar. Type \"Admin\". Select \"Admin\" from the menu. Click \"+ Add\". Open \"User Role\". Select \"ESS\". In Employee Name, type \"Radha Gupta\". Click \"Save\". Verify \"Passwords do not match\"."
+    },
+    {
+      "id": "generic_filter_regression",
+      "name": "Generic search and filter",
+      "type": "filter-flow",
+      "url": "https://example.com",
+      "instructions": "Search for products. Apply filter where brand equals HP. Apply filter where price is between 60000 and 75000. Verify results are updated."
+    }
+  ]
+}

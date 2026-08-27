@@ -1,0 +1,8 @@
+﻿{
+    "instructions":  "Open https://www.flipkart.com/\nClick Fashion\nClick Korean Store\nClick the Seoul Streetwear image\nClick CLEAR ALL\nOpen Brand\nType AK into Search Brand\nSelect Brand AK checkbox\nVerify exactly one product is shown\nVerify Women Striped Round Neck Pure Cotton Pink T-Shirt",
+    "skipExecution":  false,
+    "maxAttempts":  2,
+    "applicationUrl":  "https://www.flipkart.com/",
+    "browserMode":  "headed",
+    "headless":  false
+}
